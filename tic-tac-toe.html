@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+//
+<head>
+  <meta charset="UTF-8">
+  <title>Tic-Tac-Toe</title>
+  <link rel="icon" type="image/x-icon" href="tic-tac-toe.ico">
+  <link rel="stylesheet" href="./css/ttt.css">
+</head>
+
+<body>
+<div id="container">
+  <h1>Tic-Tac-Toe</h1>
+  <p><i>Ah, the classic!</i></p>
+  <div id="board"></div>
+  <p id="status"></p>
+  <img id="x" alt="Hamtaro">
+  <button id="restartos" onclick="restart()">Play Again</button>
+  <img id="y"alt="Oxnard">
+</div>
+
+</body>
+<script>
+  // INicializace
+  x.src = 'hamtaro/Hamtaro_idle.png'
+  y.src = 'hamtaro/Oxnard_Normal.png'
+  board = document.getElementById('board');
+  rozhodci = document.getElementById('status');
+  restartButton = document.getElementById('restartos');
+  let momentalniHrac;
+  let bunka;
+
+  momentalniHrac = 'X';
+  rozhodci.textContent = `Let's play! Player ${momentalniHrac}'s turn`;
+
+  let gameBoard = ['', '', '',
+                   '', '', '',
+                   '', '', ''];
+  hrajeme = true;
+
+  for (let i = 0; i < 9; i++) {
+    // Vytvoří desku
+    bunka = document.createElement('div');
+    bunka.classList.add('cell');
+    bunka.setAttribute('data-index', i);
+    bunka.addEventListener('click', Kliknuti);
+    board.appendChild(bunka);
+  }
+  function Kliknuti(event) {
+// Co se stane když hráč klikne na buňku
+    if (hrajeme) {
+      const index = event.target.getAttribute('data-index');
+
+
+      if (gameBoard[index] === '' && hrajeme) {
+        gameBoard[index] = momentalniHrac;
+        event.target.textContent = momentalniHrac;
+
+        if (Vitez()) {
+          // Kontrola zda kombinace nebyla nalezena
+          rozhodci.textContent = `Player ${momentalniHrac} wins!`;
+          image(momentalniHrac);
+          Console.log(`Hráč ${momentalniHrac} vítězí`)
+          hrajeme = false;
+
+        } else if (gameBoard.every(bunka => bunka !== '')) {
+          rozhodci.textContent = "Draw!";
+          image("ne");
+          Console.log("Remíza, nikdo nevyhrál...")
+          hrajeme = false;
+
+        } else {
+          momentalniHrac = momentalniHrac === 'X' ? 'O' : 'X';
+          rozhodci.textContent = `Player ${momentalniHrac}'s turn`;
+        }
+      }
+    }
+  }
+  function Vitez() {
+    // Klič k vítězství piškvorek tkví v téhle kombinaci
+    const Kombinace = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+
+            /*
+            0 | 1 | 2
+            3 | 4 | 5
+            6 | 7 | 8
+             */
+    ];
+
+
+    // Pokud bude COMBO nalezeno, je konec, hráč vyhrává.
+    for (const combo of Kombinace) {
+      const [a, b, c] = combo;
+
+
+      if (gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+        // Kontrola, zda kombinace má stejný znak tzn. x nebo o
+        return true;
+      }
+    }
+    return false;
+  }
+  function restart() {
+// Když hráč klikne na Reset Game, Hra se restartuje
+    gameBoard = ['', '', '',
+                 '', '', '',
+                 '', '', ''];
+    momentalniHrac = 'X';
+    x.src = 'hamtaro/Hamtaro_idle.png'
+    y.src = 'hamtaro/Oxnard_Normal.png'
+    hrajeme = true;
+    rozhodci.textContent = `New game! \nPlayer ${momentalniHrac}'s turn`;
+    document.querySelectorAll('.cell').forEach(bunka => {
+      bunka.textContent = '';
+    });
+  }
+  function image(hrac){
+    var imgX = document.getElementById('x');
+    var imgY = document.getElementById('y');
+
+    if(hrac == "X"){
+      imgX.src = 'hamtaro/Hamtaro_win.png'
+      imgY.src = 'hamtaro/Oxnard_lose.png'
+    }
+    if(hrac == "O"){
+      imgX.src = 'hamtaro/Hamtaro_Lose.png'
+      imgY.src = 'hamtaro/Oxnard_Win.png'
+    }
+    if(hrac == "ne"){
+      imgX.src = 'hamtaro/Hamtaro_Draw.png'
+      imgY.src = 'hamtaro/Oxnard_Draw.png'
+    }
+  }
+
+</script>
+
+
+
+</html>
+
+
+
+
+
+
+<!--
+            *     ,MMM8&&&.            *
+                  MMMM88&&&&&    .
+                 MMMM88&&&&&&&
+     *           MMM88&&&&&&&&
+                 MMM88&&&&&&&&
+                 'MMM88&&&&&&'
+                   'MMM8&&&'      *
+          |\___/|     /\___/\
+          )     (     )    ~( .              '
+         =\     /=   =\~    /=
+           )===(       ) ~ (
+          /     \     /     \
+          |     |     ) ~   (
+         /       \   /     ~ \
+         \       /   \~     ~/
+  jgs_/\_/\__  _/_/\_/\__~__/_/\_/\_/\_/\_/\_
+  |  |  |  |( (  |  |  | ))  |  |  |  |  |  |
+  |  |  |  | ) ) |  |  |//|  |  |  |  |  |  |
+  |  |  |  |(_(  |  |  (( |  |  |  |  |  |  |
+  |  |  |  |  |  |  |  |\)|  |  |  |  |  |  |
+  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+-->
+
